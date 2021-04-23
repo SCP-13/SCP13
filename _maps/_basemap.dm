@@ -5,8 +5,8 @@
 #ifndef LOWMEMORYMODE
 	#ifdef ALL_MAPS
 		#include "map_files\Debugdalus\TGS_Debugdalus.dmm"
-		#include "map_files\LV624\LV624.dmm"
-		#include "map_files\Pillar_of_Spring\TGS_Pillar_of_Spring.dmm"
+		#include "map_files\USA\USA.dmm"
+		#include "map_files\Site51\Site51.dmm"
 		#ifdef CIBUILDING
 			#include "templates.dm"
 		#endif
