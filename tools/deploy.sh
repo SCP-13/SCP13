@@ -18,7 +18,7 @@ if [ -d ".git" ]; then
   cp -r .git/logs/* $1/.git/logs/
 fi
 
-cp tgmc.dmb tgmc.rsc $1/
+cp scp13.dmb scp13.rsc $1/
 cp -r _maps/* $1/_maps/
 cp -r strings/* $1/strings/
 

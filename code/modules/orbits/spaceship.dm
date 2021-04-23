@@ -1,4 +1,4 @@
-//A thing for 'navigating' the current ship map up or down the gravity well.
+//A thing for 'navigating' the current complex map up or down the gravity well.
 
 #define ESCAPE_VELOCITY 	5
 #define SAFE_DISTANCE 		4
@@ -85,7 +85,7 @@ GLOBAL_VAR_INIT(current_orbit,STANDARD_ORBIT)
 
 	if(authenticated)
 		dat += "<BR>\[ <A HREF='?src=\ref[src];logout=1'>LOG OUT</A> \]"
-		dat += "<center><h4>[SSmapping.configs[SHIP_MAP].map_name]</h4></center>"//get the current ship map name
+		dat += "<center><h4>[SSmapping.configs[SHIP_MAP].map_name]</h4></center>"//get the current complex map name
 
 		dat += "<br><center><h3>[GLOB.current_orbit]</h3></center>" //display the current orbit level
 		dat += "<br><center>Power Level: [get_power_amount()]|Engines prepared: [can_change_orbit(silent = TRUE) ? "Ready" : "Recalculating"]</center>" //display ship nav stats, power level, cooldown.

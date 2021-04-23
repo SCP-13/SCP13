@@ -45,7 +45,7 @@ FROM dm_base as build
 
 COPY . .
 
-RUN DreamMaker -max_errors 0 tgmc.dme && tools/deploy.sh /deploy
+RUN DreamMaker -max_errors 0 scp13.dme && tools/deploy.sh /deploy
 
 FROM dm_base
 
@@ -64,6 +64,6 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/* \
     && mkdir -p /root/.byond/bin
 
-VOLUME [ "/tgmc/config", "/tgmc/data" ]
+VOLUME [ "/scp13/config", "/scp13/data" ]
 
-ENTRYPOINT [ "DreamDaemon", "tgmc.dmb", "-port", "1337", "-trusted", "-close", "-verbose" ]
+ENTRYPOINT [ "DreamDaemon", "scp13.dmb", "-port", "1337", "-trusted", "-close", "-verbose" ]

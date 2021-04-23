@@ -49,7 +49,7 @@ GLOBAL_LIST_INIT(pencode_blocked_tags, list("*", "hr", "small", "/small", "list"
 
 	t = replacetext(t, "\[sign\]", "<font face=\"[PAPER_SIGN_FONT]\"><i>[user ? user.real_name : "Anonymous"]</i></font>")
 	t = replacetext(t, "\[field\]", "<span class=\"paper_field\"></span>")
-	t = replacetext(t, "\[logo\]", "<img src='tgmclogo.png' />")
+	t = replacetext(t, "\[logo\]", "<img src='scplogo.png' />")
 	t = replacetext(t, "\[ntlogo\]", "<img src='ntlogo.png' />")
 
 	t = replacetext(t, "\[mapname\]", "[SSmapping.configs[GROUND_MAP].map_name]")
