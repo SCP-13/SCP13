@@ -1,0 +1,809 @@
+/*
+* Backpack
+*/
+
+/obj/item/storage/backpack
+	name = "backpack"
+	desc = "You wear this on your back and put items into it."
+	icon_state = "backpack"
+	w_class = WEIGHT_CLASS_BULKY
+	flags_equip_slot = ITEM_SLOT_BACK	//ERROOOOO
+	max_w_class = 3
+	storage_slots = null
+	max_storage_space = 24
+	var/worn_accessible = FALSE //whether you can access its content while worn on the back
+
+/obj/item/storage/backpack/attack_hand(mob/living/user)
+	if(!worn_accessible && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.back == src)
+/*			if(user.dropItemToGround(src))
+				pickup(user)
+				if(!user.put_in_active_hand(src))
+					dropped(user)
+*/
+			to_chat(H, "<span class='notice'>You can't look in [src] while it's on your back.</span>")
+			return TRUE
+	return ..()
+
+
+/obj/item/storage/backpack/AltClick(mob/user)
+	if(!ishuman(user) || !length(contents) || isturf(loc))
+		return ..() //Return to fail and go back to base.
+	if(worn_accessible)
+		return ..() //Return to succeed and draw the item.
+	var/mob/living/carbon/human/human_user = user
+	if(human_user.back == src)
+		to_chat(human_user, "<span class='notice'>You can't look in [src] while it's on your back.</span>")
+		return
+	return ..()
+
+
+/obj/item/storage/backpack/attackby(obj/item/I, mob/user, params)
+	. = ..()
+
+	if (use_sound)
+		playsound(loc, use_sound, 15, 1, 6)
+
+
+/obj/item/storage/backpack/equipped(mob/user, slot)
+	if(slot == SLOT_BACK)
+		mouse_opacity = 2 //so it's easier to click when properly equipped.
+		if(use_sound)
+			playsound(loc, use_sound, 15, 1, 6)
+		if(!worn_accessible && user.s_active == src) //currently looking into the backpack
+			close(user)
+	..()
+
+/obj/item/storage/backpack/dropped(mob/user)
+	mouse_opacity = initial(mouse_opacity)
+	..()
+
+
+/obj/item/storage/backpack/open(mob/user)
+	if(!worn_accessible && ishuman(user))
+		var/mob/living/carbon/human/H = user
+		if(H.back == src)
+			to_chat(H, "<span class='notice'>You can't access [src] while it's on your back.</span>")
+			return
+	..()
+
+/*
+* Backpack Types
+*/
+
+/obj/item/storage/backpack/holding
+	name = "bag of holding"
+	desc = "A backpack that opens into a localized pocket of Blue Space."
+	icon_state = "holdingpack"
+	max_w_class = 4
+	max_storage_space = 28
+
+	proc/failcheck(mob/user as mob)
+		if (prob(src.reliability)) return 1 //No failure
+		if (prob(src.reliability))
+			to_chat(user, "<span class='warning'>The Bluespace portal resists your attempt to add another item.</span>")
+		else
+			to_chat(user, "<span class='warning'>The Bluespace generator malfunctions!</span>")
+			for (var/obj/O in src.contents) //it broke, delete what was in it
+				qdel(O)
+			crit_fail = 1
+			icon_state = "brokenpack"
+
+/obj/item/storage/backpack/holding/attackby(obj/item/I, mob/user, params)
+	if(crit_fail)
+		to_chat(user, "<span class='warning'>The Bluespace generator isn't working.</span>")
+
+	else if(istype(I, /obj/item/storage/backpack/holding) && !I.crit_fail)
+		to_chat(user, "<span class='warning'>The Bluespace interfaces of the two devices conflict and malfunction.</span>")
+		qdel(I)
+
+	else
+		return ..()
+
+/obj/item/storage/backpack/santabag
+	name = "Santa's Gift Bag"
+	desc = "Space Santa uses this to deliver toys to all the nice children in space in Christmas! Wow, it's pretty big!"
+	icon_state = "giftbag0"
+	item_state = "giftbag"
+	w_class = WEIGHT_CLASS_BULKY
+	storage_slots = null
+	max_w_class = 3
+	max_storage_space = 400 // can store a ton of shit!
+
+/obj/item/storage/backpack/cultpack
+	name = "trophy rack"
+	desc = "It's useful for both carrying extra gear and proudly declaring your insanity."
+	icon_state = "cultpack"
+
+/obj/item/storage/backpack/clown
+	name = "Giggles von Honkerton"
+	desc = "It's a backpack made by Honk! Co."
+	icon_state = "clownpack"
+
+/obj/item/storage/backpack/corpsman
+	name = "medical backpack"
+	desc = "It's a backpack especially designed for use in a sterile environment."
+	icon_state = "medicalpack"
+
+/obj/item/storage/backpack/security
+	name = "security backpack"
+	desc = "It's a very robust backpack."
+	icon_state = "securitypack"
+
+/obj/item/storage/backpack/captain
+	name = "captain's backpack"
+	desc = "It's a special backpack made exclusively for officers."
+	icon_state = "captainpack"
+
+/obj/item/storage/backpack/industrial
+	name = "industrial backpack"
+	desc = "It's a tough backpack for the daily grind of station life."
+	icon_state = "engiepack"
+
+/obj/item/storage/backpack/toxins
+	name = "laboratory backpack"
+	desc = "It's a light backpack modeled for use in laboratories and other scientific institutions."
+	icon_state = "toxpack"
+
+/obj/item/storage/backpack/hydroponics
+	name = "herbalist's backpack"
+	desc = "It's a green backpack with many pockets to store plants and tools in."
+	icon_state = "hydpack"
+
+/obj/item/storage/backpack/genetics
+	name = "geneticist backpack"
+	desc = "It's a backpack fitted with slots for diskettes and other workplace tools."
+	icon_state = "genpack"
+
+/obj/item/storage/backpack/virology
+	name = "sterile backpack"
+	desc = "It's a sterile backpack able to withstand different pathogens from entering its fabric."
+	icon_state = "viropack"
+
+/obj/item/storage/backpack/chemistry
+	name = "chemistry backpack"
+	desc = "It's an orange backpack which was designed to hold beakers, pill bottles and bottles."
+	icon_state = "chempack"
+
+/*
+* Satchel Types
+*/
+
+/obj/item/storage/backpack/satchel
+	name = "leather satchel"
+	desc = "It's a very fancy satchel made with fine leather."
+	icon_state = "satchel"
+	worn_accessible = TRUE
+	storage_slots = null
+	max_storage_space = 15
+
+/obj/item/storage/backpack/satchel/withwallet/Initialize(mapload, ...)
+	. = ..()
+	new /obj/item/storage/wallet/random( src )
+
+/obj/item/storage/backpack/satchel/norm
+	name = "satchel"
+	desc = "A trendy looking satchel."
+	icon_state = "satchel-norm"
+
+/obj/item/storage/backpack/satchel/rugged
+	name = "satchel"
+	desc = "A rugged satchel for workers of all types."
+	icon_state = "satchel-norm"
+
+/obj/item/storage/backpack/satchel/eng
+	name = "industrial satchel"
+	desc = "A tough satchel with extra pockets."
+	icon_state = "satchel-eng"
+
+/obj/item/storage/backpack/satchel/med
+	name = "medical satchel"
+	desc = "A sterile satchel used in medical departments."
+	icon_state = "satchel-med"
+
+/obj/item/storage/backpack/satchel/vir
+	name = "virologist satchel"
+	desc = "A sterile satchel with virologist colours."
+	icon_state = "satchel-vir"
+
+/obj/item/storage/backpack/satchel/chem
+	name = "chemist satchel"
+	desc = "A sterile satchel with chemist colours."
+	icon_state = "satchel-chem"
+
+/obj/item/storage/backpack/satchel/gen
+	name = "geneticist satchel"
+	desc = "A sterile satchel with geneticist colours."
+	icon_state = "satchel-gen"
+
+/obj/item/storage/backpack/satchel/tox
+	name = "scientist satchel"
+	desc = "Useful for holding research materials."
+	icon_state = "satchel-tox"
+
+/obj/item/storage/backpack/satchel/sec
+	name = "security satchel"
+	desc = "A robust satchel for security related needs."
+	icon_state = "satchel-sec"
+
+/obj/item/storage/backpack/satchel/hyd
+	name = "hydroponics satchel"
+	desc = "A green satchel for plant related work."
+	icon_state = "satchel_hyd"
+
+/obj/item/storage/backpack/satchel/cap
+	name = "captain's satchel"
+	desc = "An exclusive satchel for officers."
+	icon_state = "satchel-cap"
+
+//ERT backpacks.
+/obj/item/storage/backpack/ert
+	name = "emergency response team backpack"
+	desc = "A spacious backpack with lots of pockets, used by members of the Emergency Response Team."
+	icon_state = "ert_commander"
+
+//Commander
+/obj/item/storage/backpack/ert/commander
+	name = "emergency response team commander backpack"
+	desc = "A spacious backpack with lots of pockets, worn by the commander of a Emergency Response Team."
+
+//Security
+/obj/item/storage/backpack/ert/security
+	name = "emergency response team security backpack"
+	desc = "A spacious backpack with lots of pockets, worn by security members of a Emergency Response Team."
+	icon_state = "ert_security"
+
+//Engineering
+/obj/item/storage/backpack/ert/engineer
+	name = "emergency response team engineer backpack"
+	desc = "A spacious backpack with lots of pockets, worn by engineering members of a Emergency Response Team."
+	icon_state = "ert_engineering"
+
+//Medical
+/obj/item/storage/backpack/ert/medical
+	name = "emergency response team medical backpack"
+	desc = "A spacious backpack with lots of pockets, worn by medical members of a Emergency Response Team."
+	icon_state = "ert_medical"
+
+
+/*========================== MARINE BACKPACKS ================================
+==========================================================================*/
+
+/obj/item/storage/backpack/marine
+	name = "\improper lightweight IMP backpack"
+	desc = "The standard-issue pack of the TGMC forces. Designed to slug gear into the battlefield."
+	icon_state = "marinepack"
+
+/obj/item/storage/backpack/marine/standard
+	name = "\improper lightweight IMP backpack"
+	desc = "The standard-issue pack of the TGMC forces. Designed to slug gear into the battlefield."
+
+/obj/item/storage/backpack/marine/corpsman
+	name = "\improper TGMC corpsman backpack"
+	desc = "The standard-issue backpack worn by TGMC corpsmen. You can recharge defibrillators by plugging them in."
+	icon_state = "marinepackm"
+	var/obj/item/cell/high/cell //Starts with a high capacity energy cell.
+	var/icon_skin
+
+/obj/item/storage/backpack/marine/corpsman/Initialize(mapload, ...)
+	. = ..()
+	cell = new (src)
+	icon_skin = icon_state
+	update_icon()
+
+/obj/item/storage/backpack/marine/corpsman/proc/use_charge(mob/user, amount = 0, mention_charge = TRUE)
+	var/warning = ""
+	if(amount > cell.charge)
+		playsound(src, 'sound/machines/buzz-two.ogg', 25, 1)
+		if(cell.charge)
+			warning = "<span class='warning'>[src]'s defibrillator recharge unit buzzes a warning, its battery only having enough power to partially recharge the defibrillator for [cell.charge] amount. "
+		else
+			warning = "<span class='warning'>[src]'s defibrillator recharge unit buzzes a warning, as its battery is completely depleted of charge. "
+	else
+		playsound(src, 'sound/machines/ping.ogg', 25, 1)
+		warning = "<span class='notice'>[src]'s defibrillator recharge unit cheerfully pings as it successfully recharges the defibrillator. "
+	cell.charge -= min(cell.charge, amount)
+	if(mention_charge)
+		to_chat(user, "<span class='notice'>[warning]<b>Charge Remaining: [cell.charge]/[cell.maxcharge]</b></span>")
+	update_icon()
+
+/obj/item/storage/backpack/marine/corpsman/examine(mob/user)
+	. = ..()
+	if(cell)
+		to_chat(user, "<span class='notice'>Its defibrillator recharge unit has a loaded power cell and its readout counter is active. <b>Charge Remaining: [cell.charge]/[cell.maxcharge]</b></span>")
+	else
+		to_chat(user, "<span class='warning'>Its defibrillator recharge unit does not have a power cell installed!</span>")
+
+/obj/item/storage/backpack/marine/corpsman/update_icon()
+	icon_state = icon_skin
+	if(cell?.charge >= 0)
+		switch(PERCENT(cell.charge/cell.maxcharge))
+			if(75 to INFINITY)
+				icon_state += "_100"
+			if(50 to 74.9)
+				icon_state += "_75"
+			if(25 to 49.9)
+				icon_state += "_50"
+			if(0.1 to 24.9)
+				icon_state += "_25"
+	else
+		icon_state += "_0"
+
+/obj/item/storage/backpack/marine/corpsman/MouseDrop_T(obj/item/W, mob/living/user) //Dragging the defib/power cell onto the backpack will trigger its special functionality.
+	if(istype(W, /obj/item/defibrillator))
+		if(cell)
+			var/obj/item/defibrillator/D = W
+			var/charge_difference = D.dcell.maxcharge - D.dcell.charge
+			if(charge_difference) //If the defib has less than max charge, recharge it.
+				use_charge(user, charge_difference) //consume an appropriate amount of charge
+				D.dcell.charge += min(charge_difference, cell.charge) //Recharge the defibrillator battery with the lower of the difference between its present and max cap, or the remaining charge
+			else
+				to_chat(user, "<span class='warning'>This defibrillator is already at maximum charge!</span>")
+		else
+			to_chat(user, "<span class='warning'>[src]'s defibrillator recharge unit does not have a power cell installed!</span>")
+	else if(istype(W, /obj/item/cell))
+		if(user.drop_held_item())
+			W.loc = src
+			var/replace_install = "You replace the cell in [src]'s defibrillator recharge unit."
+			if(!cell)
+				replace_install = "You install a cell in [src]'s defibrillator recharge unit."
+			else
+				cell.update_icon()
+				user.put_in_hands(cell)
+			cell = W
+			to_chat(user, "<span class='notice'>[replace_install] <b>Charge Remaining: [cell.charge]/[cell.maxcharge]</b></span>")
+			playsound(user, 'sound/weapons/guns/interact/rifle_reload.ogg', 25, 1, 5)
+			update_icon()
+	return ..()
+
+
+/obj/item/storage/backpack/marine/tech
+	name = "\improper TGMC technician backpack"
+	desc = "The standard-issue backpack worn by TGMC technicians. Specially equipped to hold sentry gun and M56D emplacement parts."
+	icon_state = "marinepackt"
+	bypass_w_limit = list(
+		/obj/item/standard_hmg,
+		/obj/item/ammo_magazine/standard_hmg,
+		/obj/item/turret_top,
+		/obj/item/ammo_magazine/sentry,
+		/obj/item/ammo_magazine/minisentry,
+		/obj/item/marine_turret/mini,
+		/obj/item/mortal_shell,
+		/obj/item/mortar_kit,
+		/obj/item/stack/razorwire,
+		/obj/item/stack/sandbags,
+	)
+
+/obj/item/storage/backpack/marine/satchel
+	name = "\improper TGMC satchel"
+	desc = "A heavy-duty satchel carried by some TGMC soldiers and support personnel."
+	icon_state = "marinesat"
+	worn_accessible = TRUE
+	storage_slots = null
+	max_storage_space = 15
+
+/obj/item/storage/backpack/marine/satchel/green
+	name = "\improper TGMC satchel"
+	icon_state = "marinesat_green"
+
+
+/obj/item/storage/backpack/marine/satchel/corpsman
+	name = "\improper TGMC corpsman satchel"
+	desc = "A heavy-duty satchel carried by some TGMC corpsmen."
+	icon_state = "marinesatm"
+
+/obj/item/storage/backpack/marine/satchel/tech
+	name = "\improper TGMC technician satchel"
+	desc = "A heavy-duty satchel carried by some TGMC technicians."
+	icon_state = "marinesatt"
+
+/obj/item/storage/backpack/marine/smock
+	name = "\improper M3 sniper's smock"
+	desc = "A specially designed smock with pockets for all your sniper needs."
+	icon_state = "smock"
+	worn_accessible = TRUE
+
+//CLOAKS
+
+/obj/item/storage/backpack/marine/satchel/officer_cloak
+	name = "Officer Cloak"
+	desc = "A dashing cloak as befitting an officer."
+	icon_state = "officer_cloak" //with thanks to Baystation12
+	item_state = "officer_cloak" //with thanks to Baystation12
+
+/obj/item/storage/backpack/marine/satchel/captain_cloak
+	name = "Captain's Cloak"
+	desc = "An opulent cloak detailed with your many accomplishments."
+	icon_state = "commander_cloak" //with thanks to Baystation12
+	item_state = "commander_cloak" //with thanks to Baystation12
+
+/obj/item/storage/backpack/marine/satchel/officer_cloak_red
+	name = "Officer Cloak - Red"
+	desc = "A dashing cloak as befitting an officer, with fancy red trim."
+	icon_state = "officer_cloak_red" //with thanks to Baystation12
+	item_state = "officer_cloak_red" //with thanks to Baystation12
+
+/obj/item/storage/backpack/marine/satchel/captain_cloak_red
+	name = "Captain's Cloak - Red"
+	desc = "An opulent cloak detailed with your many accomplishments, with fancy red trim."
+	icon_state = "commander_cloak_red" //with thanks to Baystation12
+	item_state = "commander_cloak_red" //with thanks to Baystation12
+
+
+// Scout Cloak
+/obj/item/storage/backpack/marine/satchel/scout_cloak
+	name = "\improper M68 Thermal Cloak"
+	desc = "The lightweight thermal dampeners and optical camouflage provided by this cloak are weaker than those found in standard TGMC ghillie suits. In exchange, the cloak can be worn over combat armor and offers the wearer high manueverability and adaptability to many environments. Serves as a satchel."
+	icon_state = "scout_cloak"
+	var/camo_active = 0
+	var/camo_active_timer = 0
+	var/camo_cooldown_timer = null
+	var/camo_last_stealth = null
+	var/camo_last_shimmer = null
+	var/camo_energy = 100
+	var/mob/living/carbon/human/wearer = null
+	var/shimmer_alpha = SCOUT_CLOAK_RUN_ALPHA
+	var/stealth_delay = null
+	actions_types = list(/datum/action/item_action/toggle)
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/scout
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/Destroy()
+	camo_off()
+	return ..()
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/dropped(mob/user)
+	camo_off(user)
+	wearer = null
+	STOP_PROCESSING(SSprocessing, src)
+	return ..()
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/verb/use_camouflage()
+	set name = "Toggle M68 Thermal Camouflage"
+	set desc = "Activate your cloak's camouflage."
+	set category = "Scout"
+
+	camouflage()
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/camouflage()
+	if (usr.incapacitated(TRUE))
+		return
+
+	var/mob/living/carbon/human/M = usr
+	if (!istype(M))
+		return
+
+	if (M.back != src)
+		to_chat(M, "<span class='warning'>You must be wearing the cloak to activate it!")
+		return
+
+	if (camo_active)
+		camo_off(usr)
+		return
+
+	if(SEND_SIGNAL(M, COMSIG_MOB_ENABLE_STEALTH) & STEALTH_ALREADY_ACTIVE)
+		to_chat(M, "<span class='warning'>You are already cloaked!</span>")
+		return FALSE
+
+	if (camo_cooldown_timer)
+		to_chat(M, "<span class='warning'>Your thermal cloak is still recalibrating! It will be ready in [(camo_cooldown_timer - world.time) * 0.1] seconds.")
+		return
+
+	camo_active = TRUE
+	camo_last_stealth = world.time
+	wearer = M
+
+	RegisterSignal(wearer, COMSIG_MOB_ENABLE_STEALTH, .proc/on_other_activate)
+	M.visible_message("[M] fades into thin air!", "<span class='notice'>You activate your cloak's camouflage.</span>")
+	playsound(M.loc,'sound/effects/cloak_scout_on.ogg', 15, 1)
+
+	stealth_delay = world.time - SCOUT_CLOAK_STEALTH_DELAY
+	if(camo_last_shimmer > stealth_delay) //Shimmer after taking aggressive actions
+		wearer.alpha = shimmer_alpha //50% invisible
+	else
+		wearer.alpha = SCOUT_CLOAK_STILL_ALPHA
+
+	if (M.smokecloaked)
+		M.smokecloaked = FALSE
+	else
+		var/datum/atom_hud/security/SA = GLOB.huds[DATA_HUD_SECURITY_ADVANCED]
+		SA.remove_from_hud(M)
+		var/datum/atom_hud/simple/basic = GLOB.huds[DATA_HUD_BASIC]
+		basic.remove_from_hud(M)
+		var/datum/atom_hud/xeno_infection/XI = GLOB.huds[DATA_HUD_XENO_INFECTION]
+		XI.remove_from_hud(M)
+
+	addtimer(CALLBACK(src, .proc/on_cloak), 1)
+	RegisterSignal(M, COMSIG_HUMAN_DAMAGE_TAKEN, .proc/damage_taken)
+	RegisterSignal(M, list(
+		COMSIG_MOB_GUN_FIRED,
+		COMSIG_MOB_GUN_AUTOFIRED,
+		COMSIG_MOB_ATTACHMENT_FIRED,
+		COMSIG_MOB_THROW,
+		COMSIG_MOB_ITEM_ATTACK), .proc/action_taken)
+
+	START_PROCESSING(SSprocessing, src)
+	wearer.cloaking = TRUE
+
+	return TRUE
+
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/on_other_activate()
+	SIGNAL_HANDLER
+	return STEALTH_ALREADY_ACTIVE
+
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/on_cloak()
+	if(wearer)
+		anim(wearer.loc,wearer,'icons/mob/mob.dmi',,"cloak",,wearer.dir)
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/on_decloak()
+	if(wearer)
+		anim(wearer.loc,wearer,'icons/mob/mob.dmi',,"uncloak",,wearer.dir)
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/camo_off(mob/user)
+	UnregisterSignal(wearer, COMSIG_MOB_ENABLE_STEALTH)
+	if (!user)
+		camo_active = FALSE
+		wearer = null
+		STOP_PROCESSING(SSprocessing, src)
+		return FALSE
+
+	if(!camo_active)
+		return FALSE
+
+	camo_active = FALSE
+
+	user.visible_message("<span class='warning'>[user.name] shimmers into existence!</span>", "<span class='danger'>Your cloak's camouflage has deactivated!</span>")
+	playsound(user.loc,'sound/effects/cloak_scout_off.ogg', 15, 1)
+	user.alpha = initial(user.alpha)
+
+	var/datum/atom_hud/security/SA = GLOB.huds[DATA_HUD_SECURITY_ADVANCED]
+	SA.add_to_hud(user)
+	var/datum/atom_hud/simple/basic = GLOB.huds[DATA_HUD_BASIC]
+	basic.add_to_hud(user)
+	var/datum/atom_hud/xeno_infection/XI = GLOB.huds[DATA_HUD_XENO_INFECTION]
+	XI.add_to_hud(user)
+
+	addtimer(CALLBACK(src, .proc/on_decloak), 1)
+
+	var/cooldown = round( (initial(camo_energy) - camo_energy) / SCOUT_CLOAK_INACTIVE_RECOVERY * 10) //Should be 20 seconds after a full depletion with inactive recovery at 5
+	if(cooldown)
+		camo_cooldown_timer = world.time + cooldown //recalibration and recharge time scales inversely with charge remaining
+		to_chat(user, "<span class='warning'>Your thermal cloak is recalibrating! It will be ready in [(camo_cooldown_timer - world.time) * 0.1] seconds.")
+		process_camo_cooldown(user, cooldown)
+
+	UnregisterSignal(user, list(
+		COMSIG_HUMAN_DAMAGE_TAKEN,
+		COMSIG_MOB_GUN_FIRED,
+		COMSIG_MOB_GUN_AUTOFIRED,
+		COMSIG_MOB_ATTACHMENT_FIRED,
+		COMSIG_MOB_THROW,
+		COMSIG_MOB_ITEM_ATTACK))
+	STOP_PROCESSING(SSprocessing, src)
+	wearer.cloaking = FALSE
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/process_camo_cooldown(mob/living/user, cooldown)
+	if(!camo_cooldown_timer)
+		return
+	addtimer(CALLBACK(src, .proc/cooldown_finished), cooldown)
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/cooldown_finished()
+	camo_cooldown_timer = null
+	camo_energy = initial(camo_energy)
+	playsound(loc,'sound/effects/EMPulse.ogg', 25, 0, 1)
+	if(wearer)
+		to_chat(wearer, "<span class='danger'>Your thermal cloak has recalibrated and is ready to cloak again.</span>")
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/examine(mob/user)
+	. = ..()
+	if(user != wearer) //Only the wearer can see these details.
+		return
+	var/list/details = list()
+	details +=("It has [camo_energy]/[initial(camo_energy)] charge. </br>")
+
+	if(camo_cooldown_timer)
+		details +=("It will be ready in [(camo_cooldown_timer - world.time) * 0.1] seconds. </br>")
+
+	if(camo_active)
+		details +=("It's currently active.</br>")
+
+	to_chat(user, "<span class='warning'>[details.Join(" ")]</span>")
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/item_action_slot_check(mob/user, slot)
+	if(!ishuman(user))
+		return FALSE
+	if(slot != SLOT_BACK)
+		return FALSE
+	return TRUE
+
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/attack_self(mob/user)
+	. = ..()
+	camouflage()
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/camo_adjust_energy(mob/user, drain = SCOUT_CLOAK_WALK_DRAIN)
+	camo_energy = clamp(camo_energy - drain,0,initial(camo_energy))
+
+	if(!camo_energy) //Turn off the camo if we run out of energy.
+		to_chat(user, "<span class='danger'>Your thermal cloak lacks sufficient energy to remain active.</span>")
+		camo_off(user)
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/damage_taken(datum/source, damage)
+	SIGNAL_HANDLER
+	var/mob/living/carbon/human/wearer = source
+	if(damage >= 15)
+		to_chat(wearer, "<span class='danger'>Your cloak shimmers from the damage!</span>")
+		apply_shimmer()
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/action_taken() //This is used by multiple signals passing different parameters.
+	SIGNAL_HANDLER
+	to_chat(wearer, "<span class='danger'>Your cloak shimmers from your actions!</span>")
+	apply_shimmer()
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/proc/apply_shimmer()
+	camo_last_shimmer = world.time //Reduces transparency to 50%
+	wearer.alpha = max(wearer.alpha,shimmer_alpha)
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/process()
+	if(!wearer)
+		camo_off()
+		return
+	else if(wearer.stat != CONSCIOUS)
+		camo_off(wearer)
+		return
+
+	stealth_delay = world.time - SCOUT_CLOAK_STEALTH_DELAY
+	if(camo_last_shimmer > stealth_delay) //Shimmer after taking aggressive actions; no energy regeneration
+		wearer.alpha = shimmer_alpha //50% invisible
+	else if(camo_last_stealth > stealth_delay ) //We have an initial reprieve at max invisibility allowing us to reposition; no energy recovery during this time
+		wearer.alpha = SCOUT_CLOAK_STILL_ALPHA
+		return
+	//Stationary stealth
+	else if( wearer.last_move_intent < stealth_delay ) //If we're standing still and haven't shimmed in the past 3 seconds we become almost completely invisible
+		wearer.alpha = SCOUT_CLOAK_STILL_ALPHA //95% invisible
+		camo_adjust_energy(wearer, SCOUT_CLOAK_ACTIVE_RECOVERY)
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/sniper
+	name = "\improper M68-B Thermal Cloak"
+	icon_state = "smock"
+	desc = "The M68-B thermal cloak is a variant custom-purposed for snipers, allowing for faster, superior, stationary concealment at the expense of mobile concealment. It is designed to be paired with the lightweight M3 recon battle armor. Serves as a satchel."
+	shimmer_alpha = SCOUT_CLOAK_RUN_ALPHA * 0.5 //Half the normal shimmer transparency.
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/sniper/equippedsniper/Initialize()
+	. = ..()
+	new /obj/item/detpack(src)
+
+/obj/item/storage/backpack/marine/satchel/scout_cloak/sniper/process()
+	if(!wearer)
+		camo_off()
+		return
+	else if(wearer.stat == DEAD)
+		camo_off(wearer)
+		return
+
+	stealth_delay = world.time - SCOUT_CLOAK_STEALTH_DELAY * 0.5
+	if(camo_last_shimmer > stealth_delay) //Shimmer after taking aggressive actions; no energy regeneration
+		wearer.alpha = max(wearer.alpha, shimmer_alpha) //50% invisible
+	//Stationary stealth
+	else if( wearer.last_move_intent < stealth_delay ) //If we're standing still and haven't shimmed in the past 2 seconds we become almost completely invisible
+		wearer.alpha = SCOUT_CLOAK_STILL_ALPHA //95% invisible
+		camo_adjust_energy(wearer, SCOUT_CLOAK_ACTIVE_RECOVERY)
+
+// Welder Backpacks //
+
+/obj/item/storage/backpack/marine/engineerpack
+	name = "\improper TGMC technician welderpack"
+	desc = "A specialized backpack worn by TGMC technicians. It carries a fueltank for quick welder refueling and use,"
+	icon_state = "engineerpack"
+	var/max_fuel = 260
+	storage_slots = null
+	max_storage_space = 15
+	worn_accessible = TRUE
+
+/obj/item/storage/backpack/marine/engineerpack/Initialize(mapload, ...)
+	. = ..()
+	var/datum/reagents/R = new/datum/reagents(max_fuel) //Lotsa refills
+	reagents = R
+	R.my_atom = src
+	R.add_reagent(/datum/reagent/fuel, max_fuel)
+
+
+/obj/item/storage/backpack/marine/engineerpack/attackby(obj/item/I, mob/user, params)
+	if(iswelder(I))
+		var/obj/item/tool/weldingtool/T = I
+		if(T.welding)
+			to_chat(user, "<span class='warning'>That was close! However you realized you had the welder on and prevented disaster.</span>")
+			return
+		if(T.get_fuel() == T.max_fuel || !reagents.total_volume)
+			return ..()
+
+		reagents.trans_to(I, T.max_fuel)
+		to_chat(user, "<span class='notice'>Welder refilled!</span>")
+		playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
+
+	else if(istype(I, /obj/item/ammo_magazine/flamer_tank))
+		var/obj/item/ammo_magazine/flamer_tank/FT = I
+		if(FT.current_rounds == FT.max_rounds || !reagents.total_volume)
+			return ..()
+
+		//Reworked and much simpler equation; fuel capacity minus the current amount, with a check for insufficient fuel
+		var/fuel_transfer_amount = min(reagents.total_volume, (FT.max_rounds - FT.current_rounds))
+		reagents.remove_reagent(/datum/reagent/fuel, fuel_transfer_amount)
+		FT.current_rounds += fuel_transfer_amount
+		playsound(loc, 'sound/effects/refill.ogg', 25, 1, 3)
+		FT.caliber = "Fuel"
+		to_chat(user, "<span class='notice'>You refill [FT] with [lowertext(FT.caliber)].</span>")
+		FT.update_icon()
+
+	else if(istype(I, /obj/item/attachable/attached_gun/flamer))
+		var/obj/item/attachable/attached_gun/flamer/FT = I
+		if(FT.current_rounds == FT.max_rounds || !reagents.total_volume)
+			return ..()
+
+		var/fuel_transfer_amount = min(reagents.total_volume, (FT.max_rounds - FT.current_rounds))
+		reagents.remove_reagent(/datum/reagent/fuel, fuel_transfer_amount)
+		FT.current_rounds += fuel_transfer_amount
+		playsound(loc, 'sound/effects/refill.ogg', 25, TRUE, 3)
+		to_chat(user, "<span class='notice'>You refill [FT] with fuel.</span>")
+		FT.update_icon()
+
+	else
+		return ..()
+
+/obj/item/storage/backpack/marine/engineerpack/afterattack(obj/O as obj, mob/user as mob, proximity)
+	if(!proximity) // this replaces and improves the get_dist(src,O) <= 1 checks used previously
+		return
+	if (istype(O, /obj/structure/reagent_dispensers/fueltank) && src.reagents.total_volume < max_fuel)
+		O.reagents.trans_to(src, max_fuel)
+		to_chat(user, "<span class='notice'>You crack the cap off the top of the pack and fill it back up again from the tank.</span>")
+		playsound(src.loc, 'sound/effects/refill.ogg', 25, 1, 3)
+		return
+	else if (istype(O, /obj/structure/reagent_dispensers/fueltank) && src.reagents.total_volume == max_fuel)
+		to_chat(user, "<span class='notice'>The pack is already full!</span>")
+		return
+	..()
+
+/obj/item/storage/backpack/marine/engineerpack/examine(mob/user)
+	. = ..()
+	to_chat(user, "[reagents.total_volume] units of fuel left!")
+
+
+/obj/item/storage/backpack/lightpack
+	name = "\improper lightweight combat pack"
+	desc = "A small lightweight pack for expeditions and short-range operations."
+	icon_state = "ERT_satchel"
+	worn_accessible = TRUE
+
+/obj/item/storage/backpack/commando
+	name = "commando bag"
+	desc = "A heavy-duty bag carried by Nanotrasen commandos."
+	icon_state = "commandopack"
+	storage_slots = null
+	max_storage_space = 30
+
+/obj/item/storage/backpack/captain
+	name = "marine captain backpack"
+	desc = "The contents of this backpack are top secret."
+	icon_state = "marinepack"
+	storage_slots = null
+	max_storage_space = 30
+
+
+/obj/item/storage/backpack/lightpack/som
+	name = "mining rucksack"
+	desc = "A rucksack with origins dating back to the mining colonies."
+	icon_state = "som_lightpack"
+	item_state = "som_lightpack"
+
+/obj/item/storage/backpack/rpg
+	name = "\improper TGMC rocket bag"
+	desc = "This backpack can hold 5 67mm shells or 80mm rockets."
+	icon_state = "marine_rocket"
+	item_state = "marine_rocket"
+	w_class = WEIGHT_CLASS_HUGE
+	storage_slots = 5 //It can hold 5 rockets.
+	max_storage_space = 21
+	max_w_class = 4
+	can_hold = list(/obj/item/ammo_magazine/rocket)
