@@ -22,6 +22,7 @@
 	if(.)
 		return FALSE
 
+	handle_blinks_hud_updates()
 	handle_healths_hud_updates()
 	return TRUE
 
@@ -44,8 +45,22 @@
 			else
 				hud_used.healths.icon_state = "health6"
 
+/mob/living/carbon/proc/handle_blinks_hud_updates()
+	if(hud_used?.blink)
+		switch(round((next_blinck - world.time)/ BLINCKING_TIME ))
+			if(76 to INFINITY)
+				hud_used.blink.icon_state = "blink0"
+			if(54 to 76)
+				hud_used.blink.icon_state = "blink1"
+			if(32 to 54)
+				hud_used.blink.icon_state = "blink2"
+			if(10 to 32)
+				hud_used.blink.icon_state = "blink3"
+			else
+				hud_used.blink.icon_state = "blink4"
+
 ///gives humans oxy when dragged by a xeno, called on COMSIG_MOVABLE_PULL_MOVED
-/mob/living/carbon/human/proc/oncritdrag() 
+/mob/living/carbon/human/proc/oncritdrag()
 	SIGNAL_HANDLER
 	if(isxeno(pulledby))
 		adjustOxyLoss(3) //take oxy damage per tile dragged
