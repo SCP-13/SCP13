@@ -233,6 +233,10 @@
 	else
 		to_chat(C, "<span class='notice'>You don't have a[breathes=="oxygen" ? "n oxygen" : addtext(" ",breathes)] tank.</span>")
 
+/obj/screen/blink
+	name = "blink"
+	icon_state = "blink0"
+	screen_loc = UI_BLINK
 
 /obj/screen/mov_intent
 	name = "run/walk toggle"
@@ -798,7 +802,7 @@
 
 /obj/screen/arrow/leader_tracker_arrow
 	name = "hive leader tracker arrow"
-	icon_state = "Blue_arrow"	
+	icon_state = "Blue_arrow"
 	duration = XENO_RALLYING_POINTER_DURATION
 
 /obj/screen/arrow/silo_damaged_arrow

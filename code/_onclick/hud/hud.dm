@@ -40,6 +40,7 @@
 	var/obj/screen/pressure_icon
 	var/obj/screen/toxin_icon
 	var/obj/screen/internals
+	var/obj/screen/blink
 	var/obj/screen/healths
 	var/obj/screen/stamina_hud/staminas
 	var/obj/screen/fire_icon
@@ -119,6 +120,7 @@
 	pressure_icon = null
 	toxin_icon = null
 	internals = null
+	blink = null
 	healths = null
 	staminas = null
 	fire_icon = null

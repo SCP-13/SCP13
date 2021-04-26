@@ -125,5 +125,7 @@
 	///Temporary inability to use special actions; hurts projectile damage. Regenerates each tick.
 	var/stagger = 0
 
+	var/next_blinck = 0
+
 	/// This is the cooldown on suffering additional effects for when we exhaust all stamina
 	COOLDOWN_DECLARE(last_stamina_exhaustion)

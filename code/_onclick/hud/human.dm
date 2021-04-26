@@ -147,6 +147,9 @@
 		internals = new /obj/screen/internals()
 		infodisplay += internals
 
+	if(hud_data.has_blink)
+		blink = new /obj/screen/blink()
+		infodisplay += blink
 
 	if(hud_data.has_warnings)
 		oxygen_icon = new /obj/screen/oxygen()

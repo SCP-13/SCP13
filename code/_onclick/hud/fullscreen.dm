@@ -1,12 +1,12 @@
 #define SHOULD_SHOW_TO(mymob, myscreen) (!(mymob.stat == DEAD && !myscreen.show_when_dead))
 
 
-/mob/proc/overlay_fullscreen_timer(duration, animated, category, type, severity)
-	overlay_fullscreen(category, type, severity)
+/mob/proc/overlay_fullscreen_timer(duration, animated, category, type, severity, start_animated)
+	overlay_fullscreen(category, type, severity, start_animated)
 	addtimer(CALLBACK(src, .proc/clear_fullscreen, category, animated), duration)
 
 
-/mob/proc/overlay_fullscreen(category, type, severity)
+/mob/proc/overlay_fullscreen(category, type, severity, animated)
 	var/obj/screen/fullscreen/screen = fullscreens[category]
 	if (!screen || screen.type != type)
 		// needs to be recreated
@@ -20,10 +20,14 @@
 	screen.severity = severity
 	if (client && SHOULD_SHOW_TO(src, screen))
 		screen.update_for_view(client.view)
-		client.screen += screen
+		if(animated)
+			screen.alpha = 0
+			client.screen += screen
+			animate(screen, alpha = 255, time = animated)
+		else
+			client.screen += screen
 
 	return screen
-
 
 /mob/proc/clear_fullscreen(category, animated = 10)
 	var/obj/screen/fullscreen/screen = fullscreens[category]
