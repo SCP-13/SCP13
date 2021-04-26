@@ -50,11 +50,11 @@
 		switch(round((next_blinck - world.time)/ BLINCKING_TIME ))
 			if(76 to INFINITY)
 				hud_used.blink.icon_state = "blink0"
-			if(54 to 76)
+			if(52 to 76)
 				hud_used.blink.icon_state = "blink1"
-			if(32 to 54)
+			if(28 to 52)
 				hud_used.blink.icon_state = "blink2"
-			if(10 to 32)
+			if(1 to 28)
 				hud_used.blink.icon_state = "blink3"
 			else
 				hud_used.blink.icon_state = "blink4"
