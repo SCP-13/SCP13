@@ -165,6 +165,12 @@
 #define XENO_BOMB_RESIST_1 40
 #define XENO_BOMB_RESIST_0 0
 
+#define SCP_BOMB_RESIST_4 100
+#define SCP_BOMB_RESIST_3 80
+#define SCP_BOMB_RESIST_2 60
+#define SCP_BOMB_RESIST_1 40
+#define SCP_BOMB_RESIST_0 0
+
 #define SINGLE_CASING	(1 << 0)
 #define SPEEDLOADER		(1 << 1)
 #define MAGAZINE		(1 << 2)
@@ -210,4 +216,16 @@
 #define X_TARGETED_LAYER		3
 #define X_FIRE_LAYER			1
 #define X_TOTAL_LAYERS			9
+/////////////////////////////////
+
+//SCP  Overlays Indexes//////////
+#define S_LASER_LAYER			9
+#define S_WOUND_LAYER			8
+#define S_HEAD_LAYER			7
+#define S_SUIT_LAYER			6
+#define S_L_HAND_LAYER			5
+#define S_R_HAND_LAYER			4
+#define S_TARGETED_LAYER		3
+#define S_FIRE_LAYER			1
+#define S_TOTAL_LAYERS			9
 /////////////////////////////////

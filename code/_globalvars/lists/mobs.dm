@@ -17,6 +17,9 @@ GLOBAL_LIST_EMPTY(observer_list)			//all /mob/dead/observer
 GLOBAL_LIST_EMPTY(xeno_mob_list)			//all /mob/living/carbon/xenomorph
 GLOBAL_LIST_EMPTY(alive_xeno_list)			//as above except stat != DEAD
 GLOBAL_LIST_EMPTY(dead_xeno_list)
+GLOBAL_LIST_EMPTY(scp_mob_list)				//all /mob/living/carbon/scp
+GLOBAL_LIST_EMPTY(alive_scp_list)			//as above except stat != DEAD
+GLOBAL_LIST_EMPTY(dead_scp_list)
 GLOBAL_LIST_EMPTY(human_mob_list)			//all /mob/living/carbon/human including synths and species
 GLOBAL_LIST_EMPTY(alive_human_list)			//as above except stat != DEAD
 GLOBAL_LIST_EMPTY(dead_human_list)
@@ -51,6 +54,8 @@ GLOBAL_LIST_INIT(xeno_types_tier_two, list(/mob/living/carbon/xenomorph/hunter, 
 GLOBAL_LIST_INIT(xeno_types_tier_three, list(/mob/living/carbon/xenomorph/ravager, /mob/living/carbon/xenomorph/praetorian, /mob/living/carbon/xenomorph/boiler, /mob/living/carbon/xenomorph/Defiler, /mob/living/carbon/xenomorph/crusher, /mob/living/carbon/xenomorph/shrike))
 
 GLOBAL_LIST_EMPTY_TYPED(hive_datums, /datum/hive_status) // init by makeDatumRefLists()
+
+GLOBAL_LIST_EMPTY_TYPED(scp_datums, /datum/scp_status) // init by makeDatumRefLists()
 
 /proc/update_config_movespeed_type_lookup(update_mobs = TRUE)
 	var/list/mob_types = list()

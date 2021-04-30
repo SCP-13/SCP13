@@ -79,6 +79,9 @@ GLOBAL_LIST_EMPTY(randomized_pill_icons)
 		var/datum/hive_status/HS = new H
 		GLOB.hive_datums[HS.hivenumber] = HS
 
+	for(var/H in subtypesof(/datum/scp_status))
+		var/datum/scp_status/HS = new H
+		GLOB.scp_datums[HS.scpnumber] = HS
 
 	for(var/L in subtypesof(/datum/language))
 		var/datum/language/language = L

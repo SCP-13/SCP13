@@ -13,9 +13,9 @@ Format:
 endmap
 
 map debugdalus
+	default
 	voteweight 0
 endmap
 
 map site51
-	default
 endmap

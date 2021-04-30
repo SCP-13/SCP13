@@ -46,6 +46,6 @@ BLICNKNG CONTROLLER COMPONENT
 	after_blincking = next_blincking + time_animation
 
 //Destroy proccess if player dead.
-/datum/component/blicking/Destroy()
+/datum/component/blincking/Destroy()
 	STOP_PROCESSING(SSprocessing, src)
 	return ..()

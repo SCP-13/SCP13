@@ -102,6 +102,8 @@
 	languages = list()
 	shadow_languages = list()
 
+/datum/language_holder/scp
+	languages = list(/datum/language/scpcommon)
 
 /datum/language_holder/xeno
 	languages = list(/datum/language/xenocommon)

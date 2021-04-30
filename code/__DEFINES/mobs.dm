@@ -127,6 +127,26 @@
 #define INCORPOREAL 	(1<<11) // Whether not this unit should be detectable by automated means (like turrets). Used by hivemind
 
 // =============================
+// scp types
+
+#define SCP_NONE "none_scp"
+#define SCP_NORMAL "normal_scp"
+#define SCP_ANGRY "angry_scp"
+#define SCP_ADMEME "admeme_scp"
+
+// =============================
+// scp tiers
+
+#define SCP_NEUTRAL "neutral"
+#define SCP_SAFE "safe"
+#define SCP_EUCLID "euclid"
+#define SCP_KETER "keter"
+#define SCP_APOLLYON "apollyon"
+#define SCP_THAUMEL "thaumel"
+
+GLOBAL_LIST_INIT(scptiers, list(SCP_NEUTRAL, SCP_SAFE, SCP_EUCLID, SCP_KETER, SCP_APOLLYON, SCP_THAUMEL))
+
+// =============================
 // hive types
 
 #define XENO_HIVE_NONE "none_hive"
@@ -420,6 +440,11 @@ GLOBAL_LIST_INIT(xenoupgradetiers, list(XENO_UPGRADE_BASETYPE, XENO_UPGRADE_INVA
 
 #define LIVING_SHOCK_EFFECT_COOLDOWN	10 SECONDS
 
+//SCP Defines
+
+#define SCP_HEALTH_ALERT_TRIGGER_PERCENT	0.25 //If a scp is damaged while its current hit points are less than this percent of its maximum, we send out an alert to the hive
+#define SCP_HEALTH_ALERT_TRIGGER_THRESHOLD	50 //If a scp is damaged while its current hit points are less than this amount, we send out an alert to the hive
+#define SCP_HEALTH_ALERT_COOLDOWN			60 SECONDS //The cooldown on these scp damage alerts
 
 //Xeno Defines
 

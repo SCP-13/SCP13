@@ -353,6 +353,16 @@
 
 #define COMSIG_DROPSHIP_EQUIPMENT_UNEQUIPPED "shuttle_equipment_unequipped"
 
+// scp stuff
+
+#define COMSIG_SCP_SUNDER_REGEN "scp_sunder_regen"
+
+#define COMSIG_SCP_FIRE_BURNING "scp_fire_burning"
+#define COMSIG_SCP_TAKING_DAMAGE "scp_taking_damage" // (target, damagetaken)
+
+#define COMSIG_SCP_BRUTE_DAMAGE "scp_brute_damage"
+#define COMSIG_SCP_BURN_DAMAGE "scp_burn_damage"
+
 // xeno stuff
 #define COMSIG_HIVE_BECOME_RULER "hive_become_ruler"
 #define COMSIG_HIVE_XENO_DEATH "hive_xeno_death"

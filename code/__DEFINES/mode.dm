@@ -114,6 +114,7 @@
 
 #define SUPPLY_POINT_MARINE_SPAWN 2.5
 
+#define SCP_AFK_TIMER			5 MINUTES
 #define XENO_AFK_TIMER			5 MINUTES
 
 #define DEATHTIME_CHECK(M) ((world.time - M.timeofdeath) < GLOB.respawntime)
@@ -132,4 +133,4 @@
 #define XENO_TURRET_PRICE 150
 
 //The minimum round time before siloless timer can start (13:00)
-#define MINIMUM_TIME_SILO_LESS_COLLAPSE 36000 
+#define MINIMUM_TIME_SILO_LESS_COLLAPSE 36000

@@ -84,6 +84,7 @@
 //Monkey sub-species
 
 #define isxeno(A) (istype(A, /mob/living/carbon/xenomorph))
+#define isscp(A) (istype(A, /mob/living/carbon/scp))
 
 //Xeno castes
 #define isxenoboiler(A) (istype(A, /mob/living/carbon/xenomorph/boiler))
