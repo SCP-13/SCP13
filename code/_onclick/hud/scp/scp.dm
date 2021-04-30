@@ -8,14 +8,11 @@
 
 /datum/hud/scp/New(mob/living/carbon/scp/owner, ui_style, ui_color, ui_alpha = 230)
 	..()
-	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
 
 	using = new /obj/screen/act_intent/corner()
 	using.alpha = ui_alpha
-	using.icon_state = owner.a_intent
 	static_inventory += using
-	action_intent = using
 
 	inv_box = new /obj/screen/inventory/hand/right()
 	inv_box.icon = 'icons/mob/screen/scp.dmi'

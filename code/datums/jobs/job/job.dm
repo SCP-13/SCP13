@@ -54,6 +54,9 @@ GLOBAL_PROTECT(exp_specialmap)
 
 	var/list/jobworth = list() //Associative list of indexes increased when someone joins as this job.
 
+	/// Description shown in the player's job preferences
+	var/html_description = ""
+	
 	///string; typepath for the icon that this job will show on the minimap
 	var/minimap_icon
 
@@ -198,7 +201,7 @@ GLOBAL_PROTECT(exp_specialmap)
 		var/datum/job/scaled_job = SSjob.GetJobType(index)
 		if(!(scaled_job in SSjob.active_joinable_occupations))
 			continue
-		if(isxenosjob(scaled_job) && respawn)
+		if(isxenosjob(scaled_job) && respawn && (SSticker.mode?.flags_round_type & MODE_PSY_POINTS))
 			continue
 		scaled_job.add_job_points(jobworth[index])
 

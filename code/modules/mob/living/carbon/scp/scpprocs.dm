@@ -9,3 +9,11 @@
 
 	var/datum/scp_status/HS = GLOB.scp_datums[scpnumber]
 	HS.scp_message(message, span_class, size, force, target, sound, apply_preferences, filter_list, arrow_type, arrow_color, report_distance)
+
+//Adds or removes a delay to movement based on your caste. If speed = 0 then it shouldn't do much.
+//SCP173 are -1, -4 is BLINDLINGLY FAST, +2 is fat-level
+/mob/living/carbon/scp/proc/setSCPCasteSpeed(new_speed)
+	if(new_speed == 0)
+		remove_movespeed_modifier(MOVESPEED_ID_SCP_CASTE_SPEED)
+		return
+	add_movespeed_modifier(MOVESPEED_ID_SCP_CASTE_SPEED, TRUE, 0, NONE, TRUE, new_speed)

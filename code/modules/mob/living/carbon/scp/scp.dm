@@ -1,8 +1,10 @@
 /mob/living/carbon/scp/Initialize(mapload)
 	. = ..()
+	setSCPCasteSpeed(speed)
 
 	var/datum/action/minimap/xeno/mini = new
 	mini.give_action(src)
+	add_abilities()
 
 	create_reagents(1000)
 	gender = NEUTER

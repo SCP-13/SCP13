@@ -336,6 +336,28 @@ if(selected_ability.target_flags & flagname){\
 	if(selected_ability.can_use_ability(A))
 		selected_ability.use_ability(A)
 
+/mob/living/carbon/scp/proc/ability_target(atom/A)
+	TARGET_FLAGS_MACRO(SABB_MOB_TARGET, /mob/living)
+	if(selected_ability.target_flags & SABB_TURF_TARGET)
+		return get_turf(A)
+	return A
+
+/mob/living/carbon/scp/MiddleClickOn(atom/A)
+	. = ..()
+	if(!(client.prefs.toggles_gameplay & MIDDLESHIFTCLICKING) || !selected_ability)
+		return FALSE
+	A = ability_target(A)
+	if(selected_ability.can_use_ability(A))
+		selected_ability.use_ability(A)
+
+/mob/living/carbon/scp/RightClickOn(atom/A)
+	. = ..()
+	if(!selected_ability)
+		return FALSE
+	A = ability_target(A)
+	if(selected_ability.can_use_ability(A))
+		selected_ability.use_ability(A)
+
 /*
 	Right click
 */

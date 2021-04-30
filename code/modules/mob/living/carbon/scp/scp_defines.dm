@@ -29,6 +29,8 @@
 	///What negative health amount they die at.
 	var/crit_health = -100
 
+	var/speed = 1
+
 	var/scpnumber = SCP_NORMAL
 
 	var/datum/scp_status/scp
@@ -39,6 +41,7 @@
 	var/is_charging = CHARGE_OFF //Will the mob charge when moving ? You need the charge verb to change this
 
 	var/list/datum/action/scp_abilities = list()
+	var/list/action_list = list()
 	var/datum/action/scp_action/activable/selected_ability
 
 	var/wound_type = "scp"

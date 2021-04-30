@@ -28,5 +28,13 @@
 #define XABB_TURF_TARGET		(1 << 0) // ability targets turfs
 #define XABB_MOB_TARGET			(1 << 1) // ability targets mobs
 
+#define SABB_TURF_TARGET		(1 << 0) // ability targets turfs
+#define SABB_MOB_TARGET			(1 << 1) // ability targets mobs
+
 #define XACT_KEYBIND_USE_ABILITY (1 << 0) // immediately activate even if selectable
 #define SACT_KEYBIND_USE_ABILITY (1 << 0) // immediately activate even if selectable
+
+#define ABILITY_CRASH	(1<<0)
+#define ABILITY_DISTRESS (1<<1)
+#define ABILITY_HUNT (1<<2)
+#define ABILITY_ALL_GAMEMODE	(ABILITY_CRASH|ABILITY_DISTRESS|ABILITY_HUNT)

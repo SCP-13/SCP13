@@ -21,7 +21,15 @@
 #define FOOTSTEP_MOB_SHOE 3
 #define FOOTSTEP_MOB_HUMAN 4 //Warning: Only works on /mob/living/carbon/human
 #define FOOTSTEP_XENO_MEDIUM 5
+#define FOOTSTEP_MOB_SCP173 6 //Warning: Only works on /mob/living/carbon/scp
 
+GLOBAL_LIST_INIT(scp173step, list(
+	list(
+		'sound/effects/footstep/scp173step1.ogg',
+		'sound/effects/footstep/scp173step2.ogg',
+		'sound/effects/footstep/scp173step3.ogg',
+	), 100, 1
+))
 GLOBAL_LIST_INIT(shoefootstep, list(
 	FOOTSTEP_WOOD = list(list(
 		'sound/effects/footstep/wood1.ogg',

@@ -18,6 +18,11 @@
 	e_range = e_range_
 	footstep_type = footstep_type_
 	switch(footstep_type)
+		if(FOOTSTEP_MOB_SCP173)
+			if(!isscp(parent))
+				return COMPONENT_INCOMPATIBLE
+			RegisterSignal(parent, list(COMSIG_MOVABLE_MOVED), .proc/play_scp173step)
+			return
 		if(FOOTSTEP_MOB_HUMAN)
 			if(!ishuman(parent))
 				return COMPONENT_INCOMPATIBLE
@@ -88,7 +93,7 @@
 			TRUE,
 			GLOB.barefootstep[FOOTSTEP_RESIN][3] + e_range)
 		return
-	if(H.shoes) //are we wearing shoes 
+	if(H.shoes) //are we wearing shoes
 		playsound(T, pick(GLOB.shoefootstep[T.shoefootstep][1]),
 			GLOB.shoefootstep[T.shoefootstep][2] * volume,
 			TRUE,
@@ -98,3 +103,17 @@
 		GLOB.barefootstep[T.barefootstep][2] * volume,
 		TRUE,
 		GLOB.barefootstep[T.barefootstep][3] + e_range)
+
+/datum/component/footstep/proc/play_scp173step()
+	SIGNAL_HANDLER
+	var/mob/living/carbon/scp/S = parent
+	if (!CHECK_MULTIPLE_BITFIELDS(S.flags_pass, HOVERING))//We don't make step sounds when flying
+		return
+	var/turf/open/T = prepare_step()
+	if(!T)
+		return
+
+	playsound(T, pick(GLOB.scp173step[1]),
+		GLOB.scp173step[2] * volume,
+		TRUE,
+		GLOB.scp173step[3] + e_range)

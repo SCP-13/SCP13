@@ -46,5 +46,8 @@
 		if(istype(action, /datum/action/xeno_action/activable))
 			var/datum/action/xeno_action/activable/xeno_action = action
 			xeno_action.use_ability(atom_to_walk_to)
+		else if(istype(action, /datum/action/scp_action/activable))
+			var/datum/action/scp_action/activable/scp_action = action
+			scp_action.use_ability(atom_to_walk_to)
 		else
 			action.action_activate()

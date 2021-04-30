@@ -18,10 +18,15 @@ BLICNKNG CONTROLLER COMPONENT
 	player.next_blinck = next_blincking
 	after_blincking = next_blincking + AFTER_BLINCKING_TIME + 12
 	START_PROCESSING(SSprocessing, src)
+	RegisterSignal(parent, COMSIG_MOB_BLINCK, .proc/blinck)
 
 //Check blicking
 /datum/component/blincking/process()
 	if(!isliving(parent))
+		qdel(src)
+
+	var/mob/living/P = parent
+	if(P.stat == DEAD)
 		qdel(src)
 
 	if(world.time >= next_blincking)
@@ -32,7 +37,7 @@ BLICNKNG CONTROLLER COMPONENT
 
 /datum/component/blincking/proc/blinck(time_animation = AFTER_BLINCKING_TIME, time_end_animation = 6, time_start_animation = 6, force = FALSE)
 	if(force)
-		after_blincking = world.time + AFTER_BLINCKING_TIME
+		after_blincking = world.time + time_animation + time_end_animation + time_start_animation
 	var/mob/living/player = parent
 	ADD_TRAIT(player, TRAIT_VISION_BLOCKED, src)
 	player.overlay_fullscreen_timer(time_animation, time_end_animation, "blincking", /obj/screen/fullscreen/black, start_animated = time_start_animation)
@@ -48,4 +53,5 @@ BLICNKNG CONTROLLER COMPONENT
 //Destroy proccess if player dead.
 /datum/component/blincking/Destroy()
 	STOP_PROCESSING(SSprocessing, src)
+	UnregisterSignal(parent, COMSIG_MOB_BLINCK)
 	return ..()

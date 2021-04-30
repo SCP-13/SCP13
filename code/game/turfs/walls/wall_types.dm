@@ -270,7 +270,7 @@
 	opacity = FALSE
 
 /turf/closed/wall/indestructible/splashscreen
-	name = "SCP 13"
+	name = "Space Station 13"
 	icon = 'icons/misc/title.dmi'
 	icon_state = "title_painting1"
 //	icon_state = "title_holiday"
