@@ -8,9 +8,16 @@
 
 /datum/hud/scp/New(mob/living/carbon/scp/owner, ui_style, ui_color, ui_alpha = 230)
 	..()
+	var/obj/screen/using
 	var/obj/screen/inventory/inv_box
 
-	using = new /obj/screen/act_intent/corner()
+	using = new /obj/screen/swap_hand()
+	using.icon = 'icons/mob/screen/scp.dmi'
+	using.alpha = ui_alpha
+	static_inventory += using
+
+	using = new /obj/screen/swap_hand/right()
+	using.icon = 'icons/mob/screen/scp.dmi'
 	using.alpha = ui_alpha
 	static_inventory += using
 
@@ -31,16 +38,6 @@
 	inv_box.slot_id = SLOT_L_HAND
 	l_hand_hud_object = inv_box
 	static_inventory += inv_box
-
-	using = new /obj/screen/swap_hand()
-	using.icon = 'icons/mob/screen/scp.dmi'
-	using.alpha = ui_alpha
-	static_inventory += using
-
-	using = new /obj/screen/swap_hand/right()
-	using.icon = 'icons/mob/screen/scp.dmi'
-	using.alpha = ui_alpha
-	static_inventory += using
 
 /datum/hud/scp/persistent_inventory_update()
 	if(!mymob)
