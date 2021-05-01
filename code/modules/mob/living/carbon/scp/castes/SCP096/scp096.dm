@@ -25,6 +25,8 @@
 
 /mob/living/carbon/scp/scp096/proc/IsWatched()
 	for(var/mob/living/carbon/human/H in view(src, 7))
+		if(H.species.name == "Zombie") //SCP-049-1
+			continue
 		if(is_blind(H) || H.eye_blind > 0)
 			continue
 		if(H.stat != CONSCIOUS)
@@ -34,6 +36,7 @@
 		if(H in humans_watched)
 			continue
 		humans_watched += H
+		playsound(src, 'sound/effects/scp096triger.ogg', 15, 1) //Triger
 	if(length(humans_watched) == 0 && is_charging)
 		is_charging = FALSE
 

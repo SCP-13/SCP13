@@ -99,6 +99,7 @@
 #define TRAIT_SLEEPIMMUNE		"sleep_immunity"
 #define TRAIT_FLASHBANGIMMUNE	"flashbang_immunity"
 #define TRAIT_FAKEDEATH			"fakedeath" //Makes the owner appear as dead to most forms of medical examination
+#define TRAIT_ZOMBIE			"zombie"
 #define TRAIT_LEGLESS			"legless" //Has lost all the appendages needed to stay standing up.
 #define TRAIT_NOPLASMAREGEN		"noplasmaregen"//xeno plasma wont recharge
 #define TRAIT_UNDEFIBBABLE 		"undefibbable"//human can't be revived

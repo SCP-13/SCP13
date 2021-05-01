@@ -26,7 +26,7 @@ BLICNKNG CONTROLLER COMPONENT
 		qdel(src)
 
 	var/mob/living/P = parent
-	if(P.stat == DEAD || HAS_TRAIT(P, TRAIT_FAKEDEATH))
+	if(P.stat == DEAD || HAS_TRAIT(P, TRAIT_ZOMBIE))
 		qdel(src)
 
 	if(world.time >= next_blincking)
@@ -54,4 +54,5 @@ BLICNKNG CONTROLLER COMPONENT
 /datum/component/blincking/Destroy()
 	STOP_PROCESSING(SSprocessing, src)
 	UnregisterSignal(parent, COMSIG_MOB_BLINCK)
+	REMOVE_TRAIT(parent, TRAIT_VISION_BLOCKED, src)
 	return ..()

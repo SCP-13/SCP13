@@ -35,7 +35,7 @@
 	if(!can_use_ability(H, FALSE))
 		return fail_activate()
 
-	ADD_TRAIT(H, TRAIT_FAKEDEATH, S)
+	ADD_TRAIT(H, TRAIT_ZOMBIE, S)
 	H.set_resting(TRUE, TRUE)
 
 	playsound(S, 'sound/effects/scp049deathtouch.ogg', 40, 1)
@@ -54,11 +54,8 @@
 
 	if(!owner.Adjacent(A) || !isliving(A))
 		return FALSE
-	var/mob/living/L = A
-	if(L.stat == DEAD)
-		return FALSE
-
-	if(!HAS_TRAIT(L, TRAIT_FAKEDEATH))
+	var/mob/living/carbon/human/L = A
+	if(L.stat != DEAD || !HAS_TRAIT(L, TRAIT_ZOMBIE) || L.species.name == "Zombie")
 		return FALSE
 
 
@@ -75,8 +72,9 @@
 	if(!can_use_ability(H, FALSE))
 		return fail_activate()
 
-	REMOVE_TRAIT(H, TRAIT_FAKEDEATH, S)
-	if(H.stat == DEAD) H.revive(TRUE)
+	REMOVE_TRAIT(H, TRAIT_ZOMBIE, S)
+	if(H.stat == DEAD)
+		H.revive(TRUE)
 	playsound(H.loc, 'sound/hallucinations/wail.ogg', 25, 1)
 	H.set_species("Zombie")
 

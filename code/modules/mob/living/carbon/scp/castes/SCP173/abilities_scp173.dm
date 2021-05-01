@@ -11,7 +11,7 @@
 
 /datum/action/scp_action/charge/action_activate()
 	for(var/mob/living/carbon/human/H in view(owner, 7))
-		SEND_SIGNAL(H, COMSIG_MOB_BLINCK, time_animation = 20 SECONDS, force = TRUE)
+		SEND_SIGNAL(H, COMSIG_MOB_BLINCK, time_animation = 10 SECONDS, force = TRUE)
 	playsound(owner, 'sound/effects/scp173scare.ogg', 70, 1)
 	add_cooldown()
 

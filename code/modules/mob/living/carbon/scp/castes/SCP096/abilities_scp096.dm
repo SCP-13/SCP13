@@ -23,7 +23,7 @@
 	mechanics_text = "Bye bye human"
 	cooldown_timer = 5 SECONDS
 
-/datum/action/scp_action/activable/snap/can_use_ability(atom/A, silent = FALSE, override_flags)
+/datum/action/scp_action/activable/kill/can_use_ability(atom/A, silent = FALSE, override_flags)
 	. = ..()
 	if(!.)
 		return FALSE
@@ -41,7 +41,7 @@
 			to_chat(owner, "<span class='warning'>You can snap target on distance 1 tile.</span>")
 		return FALSE
 
-/datum/action/scp_action/activable/snap/use_ability(atom/A)
+/datum/action/scp_action/activable/kill/use_ability(atom/A)
 	var/mob/living/carbon/scp/scp173/S = owner
 	var/mob/living/carbon/human/H = A
 
