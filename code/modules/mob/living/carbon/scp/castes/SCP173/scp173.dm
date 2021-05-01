@@ -1,6 +1,7 @@
+
 /mob/living/carbon/scp/scp173
 	caste_base_type = /mob/living/carbon/scp/scp173
-	name = "SCP173"
+	name = "SCP-173"
 	caste_name = "SCP173"
 	desc = ""
 	icon_state = "SCP173 Walking"

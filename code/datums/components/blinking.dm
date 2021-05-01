@@ -26,7 +26,7 @@ BLICNKNG CONTROLLER COMPONENT
 		qdel(src)
 
 	var/mob/living/P = parent
-	if(P.stat == DEAD)
+	if(P.stat == DEAD || HAS_TRAIT(P, TRAIT_FAKEDEATH))
 		qdel(src)
 
 	if(world.time >= next_blincking)

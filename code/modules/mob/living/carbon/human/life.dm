@@ -10,6 +10,9 @@
 	if(notransform)
 		return
 
+	if(stat == DEAD && species.name == "Zombie" && regenZ)
+		return
+
 	if(!HAS_TRAIT(src, TRAIT_STASIS))
 		if(stat != DEAD)
 

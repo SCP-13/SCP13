@@ -918,6 +918,94 @@
 			return TRUE
 	return FALSE
 
+/datum/species/zombie
+	name = "Zombie"
+	name_plural = "Zombies"
+	unarmed_type = /datum/unarmed_attack/punch/strong
+	species_flags = NO_PAIN|NO_BREATHE|NO_SCAN|NO_POISON
+
+	screams = list(MALE = "male_scream", FEMALE = "female_scream")
+	paincries = list(MALE = "male_pain", FEMALE = "female_pain")
+	goredcries = list(MALE = "male_gored", FEMALE = "female_gored")
+	gasps = list(MALE = "male_gasp", FEMALE = "female_gasp")
+	coughs = list(MALE = "male_cough", FEMALE = "female_cough")
+	burstscreams = list(MALE = "male_preburst", FEMALE = "female_preburst")
+	warcries = list(MALE = "male_warcry", FEMALE = "female_warcry")
+	death_message = "seizes up and falls limp... But is it dead?"
+
+	slowdown = 1
+	blood_color = "#333333"
+	icobase = 'icons/mob/human_races/r_goo_zed.dmi'
+	deform = 'icons/mob/human_races/r_goo_zed.dmi'
+	brute_mod = 0.25 //EXTREME BULLET RESISTANCE
+	burn_mod = 2 //IT BURNS
+	speech_chance  = 5
+	warning_low_pressure = 0
+	hazard_low_pressure = 0
+	cold_level_1 = -1  //zombies don't mind the cold
+	cold_level_2 = -1
+	cold_level_3 = -1
+	hud_type = /datum/hud_data/zombie
+	has_fine_manipulation = FALSE
+	knock_down_reduction = 10
+	stun_reduction = 10
+	knock_out_reduction = 5
+	has_organ = list()
+
+/datum/hud_data/zombie
+	has_a_intent = 1
+	has_m_intent = 1
+	has_warnings = 1
+	has_pressure = 1
+	has_nutrition = 0
+	has_bodytemp = 1
+	has_hands = 1
+	has_drop = 0
+	has_throw = 0
+	has_resist = 1
+	has_internals = 0
+	has_blink = 0
+	gear = list()
+
+/datum/species/zombie/handle_post_spawn(mob/living/carbon/human/H)
+	if(H.hud_used)
+		qdel(H.hud_used)
+		H.hud_used = null
+		if(H.hud_used)
+			H.hud_used.show_hud(H.hud_used.hud_version)
+	if(H.l_hand)
+		H.dropItemToGround(H.l_hand, TRUE)
+	if(H.r_hand)
+		H.dropItemToGround(H.r_hand, TRUE)
+	if(H.wear_id)
+		qdel(H.wear_id)
+	if(H.gloves)
+		qdel(H.gloves)
+	if(H.head)
+		qdel(H.head)
+	if(H.glasses)
+		qdel(H.glasses)
+	if(H.wear_mask)
+		qdel(H.wear_mask)
+	return ..()
+
+/datum/species/zombie/handle_death(mob/living/carbon/human/H, gibbed)
+	set waitfor = 0
+	if(gibbed) return
+	if(!H.regenZ) return  //Also in each check, in case they are hit with the stuff to stop the regenerating during timers.
+	sleep(5)
+	if(H && H.loc && H.stat == DEAD && H.regenZ)
+		to_chat(H, "\green You fall... but your body is slowly regenerating itself.")
+	sleep(1200)
+	if(H && H.loc && H.stat == DEAD && H.regenZ)
+		to_chat(H, "\green Your body is half regenerated...")
+	sleep(1200)
+
+	if(H && H.loc && H.stat == DEAD && H.regenZ)
+		H.revive(TRUE)
+		H.ParalyzeNoChain(4)
+		H.visible_message("<span class = 'warning'>[H] rises!", "\green YOU RISE AGAIN!")
+
 //Species unarmed attacks
 /datum/unarmed_attack
 	var/attack_verb = list("attack")	// Empty hand hurt intent verb.

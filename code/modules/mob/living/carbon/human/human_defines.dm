@@ -132,6 +132,8 @@
 	///Amount of deciseconds gained from the braindeath timer, usually by CPR.
 	var/revive_grace_time = 0
 
+	var/regenZ = TRUE
+
 	COOLDOWN_DECLARE(xeno_push_delay)
 
 	/// This is the cooldown on suffering additional effects for when shock gets high

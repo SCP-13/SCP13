@@ -2,24 +2,26 @@
 // *********** Charge
 // ***************************************
 
-/datum/action/scp_action/charge
-	name = "Charge"
+/datum/action/scp_action/charge_096
+	name = "Charge SCP096"
 	action_icon_state = "toggle_long_range"
-	mechanics_text = "CHARGE."
+	mechanics_text = "CHARGE SCP096."
 	cooldown_timer = 1 MINUTES
 	keybind_signal = COMSIG_XENOABILITY_LONG_RANGE_SIGHT
 
 /datum/action/scp_action/charge/action_activate()
-	for(var/mob/living/carbon/human/H in view(owner, 7))
-		SEND_SIGNAL(H, COMSIG_MOB_BLINCK, time_animation = 20 SECONDS, force = TRUE)
-	playsound(owner, 'sound/effects/scp173scare.ogg', 70, 1)
+	var/mob/living/carbon/scp/S = owner
+
+	S.is_charging = CHARGE_ON
+
+	playsound(S, 'sound/effects/scp173scare.ogg', 70, 1)
 	add_cooldown()
 
-/datum/action/scp_action/activable/snap
-	name = "Snap"
+/datum/action/scp_action/activable/kill
+	name = "Kill"
 	action_icon_state = "screech"
 	mechanics_text = "Bye bye human"
-	cooldown_timer = 10 SECONDS
+	cooldown_timer = 5 SECONDS
 
 /datum/action/scp_action/activable/snap/can_use_ability(atom/A, silent = FALSE, override_flags)
 	. = ..()
@@ -29,7 +31,8 @@
 	if(!owner.Adjacent(A) || !isliving(A))
 		return FALSE
 	var/mob/living/L = A
-	if(L.stat == DEAD) //no bully
+	var/mob/living/carbon/scp/scp096/O
+	if(L.stat == DEAD || !(L in O.humans_watched)) //no bully
 		return FALSE
 
 	var/turf/S = get_turf(owner)
