@@ -5,8 +5,9 @@
 	caste_name = "SCP173"
 	desc = ""
 	icon_state = "SCP173 Walking"
-	health = 200
-	maxHealth = 200
+	health = 800
+	maxHealth = 800
+	tier = SCP_EUCLID
 	speed = -1.5
 	mob_size = MOB_SIZE_BIG
 	gib_chance = 0

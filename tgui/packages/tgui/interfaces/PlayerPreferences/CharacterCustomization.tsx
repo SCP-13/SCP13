@@ -53,11 +53,6 @@ export const CharacterCustomization = (props, context) => {
                   </Box>
                 }
               />
-              <TextFieldPreference label={'Xenomorph'} value={'xeno_name'} />
-              <TextFieldPreference
-                label={'Synthetic Name'}
-                value={'synthetic_name'}
-              />
               <TextFieldPreference label={'AI Name'} value={'ai_name'} />
             </LabeledList>
           </Flex.Item>
@@ -181,11 +176,6 @@ export const CharacterCustomization = (props, context) => {
                 label={'Species'}
                 value={'species'}
                 action={'species'}
-              />
-              <SelectFieldPreference
-                label={'Synth type'}
-                value={'synthetic_type'}
-                action={'synthetic_type'}
               />
               <SelectFieldPreference
                 label={'Ethnicity'}

@@ -32,6 +32,7 @@
 	var/speed = 1
 
 	var/scpnumber = SCP_NORMAL
+	var/tier = null
 
 	var/datum/scp_status/scp
 

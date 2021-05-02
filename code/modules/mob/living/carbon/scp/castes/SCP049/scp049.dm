@@ -5,8 +5,9 @@
 	caste_name = "SCP049"
 	desc = ""
 	icon_state = "SCP049 Walking"
-	health = 200
-	maxHealth = 200
+	health = 800
+	maxHealth = 800
+	tier = SCP_EUCLID
 	speed = 1
 	mob_size = MOB_SIZE_HUMAN
 	gib_chance = 0

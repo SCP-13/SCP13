@@ -144,3 +144,117 @@ to_chat will check for valid clients itself already so no need to double check f
 	for(var/i in get_all_scp())
 		var/mob/living/carbon/scp/S = i
 		S.receive_scpmind_message(sender, message)
+
+// ***************************************
+// *********** Helpers
+// ***************************************
+/datum/scp_status/proc/post_add(mob/living/carbon/scp/S)
+	S.color = color
+
+/datum/scp_status/proc/post_removal(mob/living/carbon/scp/S)
+	S.color = null
+
+// for clean transfers between scps
+/mob/living/carbon/scp/proc/transfer_to_scp(scpnumber)
+	if (scp.scpnumber == scpnumber)
+		return // If we are in that hive already
+	if(!GLOB.scp_datums[scpnumber])
+		CRASH("invalid scpnumber passed to transfer_to_scp")
+
+	var/datum/scp_status/SS = GLOB.scp_datums[scpnumber]
+	if(scpnumber != SCP_NONE)
+		remove_from_scp()
+
+	add_to_scp(SS)
+
+// ***************************************
+// *********** Adding scps
+// ***************************************
+/datum/scp_status/proc/add_scp(mob/living/carbon/scp/S) // should only be called by add_to_scp below
+	if(S.stat == DEAD)
+		dead_scps += S
+	else
+		add_to_lists(S)
+
+	post_add(S)
+	return TRUE
+
+// helper function
+/datum/scp_status/proc/add_to_lists(mob/living/carbon/scp/S)
+	LAZYADD(scps_by_zlevel["[S.z]"], S)
+	RegisterSignal(S, COMSIG_MOVABLE_Z_CHANGED, .proc/scp_z_changed)
+
+	if(!scp_by_typepath[S.caste_base_type])
+		stack_trace("trying to add an invalid typepath into scpstatus list [S.caste_base_type]")
+		return FALSE
+
+	if(S.afk_status != MOB_CONNECTED)
+		LAZYADD(ssd_scps, S)
+
+	scp_by_typepath[S.caste_base_type] += S
+
+	return TRUE
+
+/mob/living/carbon/scp/proc/add_to_scp(datum/scp_status/SS, force=FALSE)
+	if(!force && scpnumber != SCP_NONE)
+		CRASH("trying to do a dirty add_to_scp")
+
+	if(!istype(SS))
+		CRASH("invalid scp_status passed to add_to_scp()")
+
+	if(!SS.add_scp(src))
+		CRASH("failed to add scp to a scp")
+
+	scp = SS
+	scpnumber = SS.scpnumber // just to be sure
+
+	SSdirection.start_tracking(SS.scpnumber, src)
+
+// ***************************************
+// *********** Removing scps
+// ***************************************
+/datum/scp_status/proc/remove_scp(mob/living/carbon/scp/S) // should only be called by remove_from_scp
+	if(S.stat == DEAD)
+		if(!dead_scps.Remove(S))
+			stack_trace("failed to remove a dead scp from hive status dead list, nothing was removed!?")
+			return FALSE
+	else
+		remove_from_lists(S)
+
+	post_removal(S)
+	return TRUE
+
+// helper function
+/datum/scp_status/proc/remove_from_lists(mob/living/carbon/scp/S)
+	// Remove() returns 1 if it removes an element from a list
+
+	if(!scp_by_tier[S.tier].Remove(S))
+		stack_trace("failed to remove a scp from scp status tier list, nothing was removed!?")
+		return FALSE
+
+	if(!scp_by_typepath[S.caste_base_type])
+		stack_trace("trying to remove an invalid typepath from scpstatus list")
+		return FALSE
+
+	if(!scp_by_typepath[S.caste_base_type].Remove(S))
+		stack_trace("failed to remove a scp from hive status typepath list, nothing was removed!?")
+		return FALSE
+
+	LAZYREMOVE(ssd_scps, S)
+	LAZYREMOVE(scps_by_zlevel["[S.z]"], S)
+
+	UnregisterSignal(S, COMSIG_MOVABLE_Z_CHANGED)
+
+	return TRUE
+
+/mob/living/carbon/scp/proc/remove_from_scp()
+	if(!istype(scp))
+		CRASH("tried to remove a scp from a scp that didnt have a scp to be removed from")
+
+	if(!scp.remove_scp(src))
+		CRASH("failed to remove scp from a scp")
+
+	SSdirection.stop_tracking(scp.scpnumber, src)
+
+	scp = null
+	scpnumber = SCP_NONE // failsafe value

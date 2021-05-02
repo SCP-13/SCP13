@@ -81,9 +81,6 @@ export const JobPreferences = (props, context) => {
       </Grid>
       <Grid>
         <Grid.Column>
-          <JobList name="Xenomorph Jobs" jobs={xenoJobs} />
-        </Grid.Column>
-        <Grid.Column>
           <JobList name="Flavour Jobs" jobs={flavourJobs} />
         </Grid.Column>
       </Grid>
